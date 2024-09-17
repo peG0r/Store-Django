@@ -16,6 +16,7 @@
         "src": "/(.*)",
         "dest": "orm_project/wsgi.py"
       }
-    ]
+    ],
+    "buildCommand": "pip install -r requirements.txt"
 }
 
