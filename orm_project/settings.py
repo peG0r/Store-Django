@@ -144,7 +144,7 @@ STATICFILES_DIRS = [
 
 STATIC_DIRS = [os.path.join(BASE_DIR, 'accounts/static')]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static')
 
 
 
@@ -161,3 +161,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'home'  # Redirige a esta URL después de iniciar sesión
 
 LOGOUT_REDIRECT_URL = 'logout_view'  # Redirige a esta URL después de cerrar sesión
+
+
+DEBUG = os.getenv('VERCEL_ENV') == 'development'
