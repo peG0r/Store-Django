@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Lista de Etiquetas</title>
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-white">Lista de Etiquetas</h1>
+    <ul>
+        {% for etiqueta in etiquetas %}
+            <li>{{ etiqueta.nombre }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+        <li><a href="{% url 'etiqueta_crear' %}">Crear Etiqueta</a></li>
+    </ul>
+{% endblock %}
+

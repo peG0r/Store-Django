@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Lista de Productos</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-white">Lista de Productos</h1>
+        {% if user.perfil.rol == 'VE' %}
+            <a href="{% url 'producto_create' %}" class="btn btn-primary mr-2">Crear Producto</a>
+        {% endif %}
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <select id="categoriaFiltro" class="form-select">
+                <option value="">Todas las categorías</option>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <button id="ordenarPrecio" class="btn btn-secondary">Ordenar por Precio: Mayor a Menor</button>
+        </div>
+    </div>
+    <div class="row justify-content-center" id="productos-list">
+        {% for producto in productos %}
+        <div class="col-12 mb-4 producto-item" data-categoria="{{ producto.categoria.id }}">
+            <div class="card card-bg">
+                <div class="row no-gutters">
+                    <div class="col-md-4 d-flex align-items-center">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen_url }}" class="card-img m-3" alt="{{ producto.nombre }}" style="max-width: 400px; margin: auto;">
+                        {% else %}
+                            <img src="{% static 'img/producto_default.png' %}" class="card-img" alt="{{ producto.nombre }}" style="max-width: 150px; margin: auto;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'producto_detail' pk=producto.pk %}" target="_blank">{{ producto.nombre }}</a></h5>
+                            <p class="card-text">Precio: $<span class="precio">{{ producto.precio }}</span></p>
+                            <div class="card-text text-truncate-container">
+                                <p class="text-truncate" id="descripcion-{{ producto.pk }}">{{ producto.descripcion }}</p>
+                                <button class="btn btn-link p-0 text-truncate-toggle" onclick="toggleDescription({{ producto.pk }})">Ver más</button>
+                            </div>
+                            <p class="card-text">Stock: {{ producto.stock }}</p>
+                            {% if producto.disponible %}
+                                <span class="badge badge-success text-success">Disponible</span>
+                            {% else %}
+                                <span class="badge badge-danger text-danger">No Disponible</span>
+                            {% endif %}
+                            <div class="d-flex justify-content-end">
+                                {% if user.perfil.rol == 'VE' %}
+                                    <a href="{% url 'producto_edit' pk=producto.pk %}" class="btn btn-secondary mr-2">Editar Producto</a>
+                                    <a href="{% url 'producto_delete' pk=producto.pk %}" class="btn btn-danger">Eliminar Producto</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.text-truncate-container {
+    max-height: 12.6em; /* 1.575em per line for 8 lines */
+    overflow: hidden;
+    position: relative;
+}
+
+.text-truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 8; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.text-truncate-toggle {
+    display: block;
+    cursor: pointer;
+    margin-top: 0.5em;
+}
+</style>
+
+<script>
+function toggleDescription(pk) {
+    const desc = document.getElementById('descripcion-' + pk);
+    const toggleButton = desc.nextElementSibling;
+
+    if (desc.classList.contains('text-truncate')) {
+        desc.classList.remove('text-truncate');
+        desc.parentElement.style.maxHeight = 'none';
+        toggleButton.textContent = 'Ver menos';
+    } else {
+        desc.classList.add('text-truncate');
+        desc.parentElement.style.maxHeight = '12.6em';
+        toggleButton.textContent = 'Ver más';
+    }
+}
+
+document.getElementById('categoriaFiltro').addEventListener('change', function() {
+    const categoriaId = this.value;
+    const productos = document.querySelectorAll('.producto-item');
+
+    productos.forEach(producto => {
+        if (categoriaId === "" || producto.getAttribute('data-categoria') === categoriaId) {
+            producto.style.display = 'block';
+        } else {
+            producto.style.display = 'none';
+        }
+    });
+});
+
+let ordenarAscendente = true;
+
+document.getElementById('ordenarPrecio').addEventListener('click', function() {
+    const productosList = document.getElementById('productos-list');
+    const productos = Array.from(productosList.querySelectorAll('.producto-item'));
+
+    productos.sort((a, b) => {
+        const precioA = parseFloat(a.querySelector('.precio').innerText);
+        const precioB = parseFloat(b.querySelector('.precio').innerText);
+        return ordenarAscendente ? precioA - precioB : precioB - precioA;
+    });
+
+    productos.forEach(producto => productosList.appendChild(producto));
+
+    ordenarAscendente = !ordenarAscendente;
+    this.textContent = ordenarAscendente ? 'Ordenar por Precio: Mayor a Menor' : 'Ordenar por Precio: Menor a Mayor';
+});
+</script>
+{% endblock %}

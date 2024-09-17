@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Detalle de {{ categoria.nombre }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 col-8">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
+            <h1>Descripción de {{ categoria.nombre }}</h1>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Nombre: {{ categoria.nombre }}</h5>
+            <p class="card-text p-3">Descripción: {{ categoria.descripcion|default:"No hay descripción disponible." }}</p>
+
+            {% if categoria.subcategorias.exists %}
+                <h5 class="mt-4">Subcategorías</h5>
+                <ul class="list-group mb-4">
+                    {% for subcategoria in categoria.subcategorias.all %}
+                        <li class="list-group-item bg-secondary">
+                            <a class="text-dark" href="{% url 'categoria_detalle' pk=subcategoria.pk %}">{{ subcategoria.nombre }}</a>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No hay subcategorías en esta categoría.</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if categoria.productos.exists %}
+                <button class="btn btn-link text-white me-2" onclick="toggleProductos()">Ver Productos</button>
+                <ul class="list-group productos-list mt-4" id="productos" style="display: none;">
+                    <!-- Aquí se mostrarán los productos asociados a la categoría -->
+                    {% for producto in categoria.productos.all %}
+                        <li class="list-group-item bg-list">
+                            <a class="text-dark m-3" href="{% url 'producto_detail' pk=producto.pk %}">{{ producto.nombre }}</a>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item bg-list">No hay productos en esta categoría.</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleProductos() {
+        var productosList = document.getElementById('productos');
+        if (productosList.style.display === 'none') {
+            productosList.style.display = 'block';
+        } else {
+            productosList.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+.avatar {
+    width: 250px; /* Ajusta el tamaño del avatar */
+    height: 250px; /* Ajusta el tamaño del avatar */
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    object-fit: cover; /* Asegura que la imagen cubra todo el espacio del contenedor */
+    border: 2px solid #201b1b; /* Opcional: añade un borde */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opcional: añade una sombra */
+}
+
+.avatar-mini {
+    width: 40px; /* Ajusta el tamaño del avatar */
+    height: 40px; /* Ajusta el tamaño del avatar */
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    object-fit: cover; /* Asegura que la imagen cubra todo el espacio del contenedor */
+    border: 2px solid #6ed433; /* Opcional: añade un borde */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Opcional: añade una sombra */
+}
+
+.body-bg {
+    background: url('../img/base_bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-attachment: fixed;
+}
+
+.card-bg {
+    background-color: rgb(153, 201, 153);
+}
+
+.home-img {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    border: 1px solid #0b574a;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.overlay-text {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(243, 176, 176);
+    text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+}
+
+.position-relative {
+    position: relative;
+}
+
+
+.btn-div {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-evenly;
+
+}
+
+.bg-list {
+    background-color: #a9b1eb;
+}

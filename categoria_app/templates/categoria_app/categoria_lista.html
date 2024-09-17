@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Lista de Categorías</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-white">Lista de Categorías</h1>
+        {% if user.is_authenticated and user.perfil.rol == 'VE' %}
+            <a href="{% url 'categoria_crear' %}" class="btn btn-primary">Crear Categoría</a>
+        {% endif %}
+    </div>
+    <ul class="list-group">
+        {% for categoria in categorias %}
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white">
+                <a href="{% url 'categoria_detalle' pk=categoria.pk %}" class="text-white">{{ categoria.nombre }}</a>
+                <div class="d-flex">
+                    <button class="btn btn-link text-white me-2" onclick="toggleSubcategorias({{ categoria.pk }})">Ver Subcategorías</button>
+                    {% if user.is_authenticated and user.perfil.rol == 'VE' %}
+                        <a href="{% url 'categoria_editar' pk=categoria.pk %}" class="btn btn-outline-info">Editar Categoría</a>
+                    {% endif %}
+                </div>
+            </li>
+            <ul class="list-group subcategorias-list" id="subcategorias-{{ categoria.pk }}" style="display: none;">
+                {% for subcategoria in categoria.subcategorias.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-secondary">
+                            <a class="text-white" href="{% url 'categoria_detalle' pk=subcategoria.pk %}">{{ subcategoria.nombre }}</a>
+                            <div class="d-flex">
+                                <button class="btn btn-link text-dark me-2" onclick="toggleProductos({{ subcategoria.pk }})">Ver Productos</button>
+                                {% if user.is_authenticated and user.perfil.rol == 'VE' %}
+                                    <a href="{% url 'categoria_editar' pk=subcategoria.pk %}" class="btn btn-outline-info">Editar Categoría</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                        <ul class="list-group productos-list" id="productos-{{ subcategoria.pk }}" style="display: none;">
+                            <!-- Aquí se mostrarán los productos asociados a la subcategoría -->
+                            {% for producto in subcategoria.productos.all %}
+                                <li class="list-group-item bg-list">
+                                    <a class="text-dark m-3" href="{% url 'producto_detail' pk=producto.pk %}">{{ producto.nombre }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated and not user.perfil.rol == 'VE' %}
+        <p class="mt-3 text-warning">No tienes permiso para crear categorías</p>
+    {% endif %}
+</div>
+
+<script>
+    function toggleSubcategorias(categoriaId) {
+        var subcategoriasList = document.getElementById('subcategorias-' + categoriaId);
+        if (subcategoriasList.style.display === 'none') {
+            subcategoriasList.style.display = 'block';
+        } else {
+            subcategoriasList.style.display = 'none';
+        }
+    }
+
+    function toggleProductos(subcategoriaId) {
+        var productosList = document.getElementById('productos-' + subcategoriaId);
+        if (productosList.style.display === 'none') {
+            productosList.style.display = 'block';
+        } else {
+            productosList.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+<h1>Home</h1>
+{% endblock %}
+{% block content %}
+<div class="position-relative text-center">
+    <img src="{% static 'img/home.jpg' %}" alt="home-imagen" class="img-fluid home-img">
+    <div class="overlay-text text-white">
+        <h1>Bienvenidos a la Magic Store</h1>
+    </div>
+    <div class="btn-container btn-div">        
+        <div>
+            <button class="btn p-2 m-3" style="background-color: rgb(71, 221, 171);"><a class="text-dark" href="{% url 'producto_list' %}">Ver Productos</button>
+        </div>
+        <div>
+            <button class="btn p-2 m-3" style="background-color: rgb(72, 223, 223);"><a class="text-dark" href="{% url 'categoria_lista' %}">Ver Categorias</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

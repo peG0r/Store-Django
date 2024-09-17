@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Crear Etiqueta</title>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-white">Crear Etiqueta</h1>
+    <form method="POST" class="text-white">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre</label>
+            {{ form.nombre }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.productos.id_for_label }}" class="form-label">Productos</label>
+            {{ form.productos }}
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Etiqueta</button>
+    </form>
+</div>
+{% endblock %}
