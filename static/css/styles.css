@@ -17,7 +17,7 @@
 }
 
 .body-bg {
-    background: url('../img/base_bg.jpg') no-repeat center center fixed;
+    background: url('/static/img/base_bg.jpg') no-repeat center center fixed;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: right top;
